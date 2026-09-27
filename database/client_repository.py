@@ -1,14 +1,11 @@
 from sqlalchemy import select
 
 from database.conection import SessionLocal
-from database.client_models import UserDB, UserProfileDB
+from database.client_models import UserDB, UsersProfileDB
 
 
 class UserRepository:
 
-    # -------------------------
-    # Users
-    # -------------------------
 
     def get_by_chat_id(self, chat_id: int) -> UserDB | None:
 
@@ -41,15 +38,11 @@ class UserRepository:
 
         return self.create_user(chat_id)
 
-    # -------------------------
-    # Profiles
-    # -------------------------
-
     def create_profile(self, user_id: int, name: str, description: str,
-                       embedding: str | None = None, ) -> UserProfileDB:
+                       embedding: str | None = None, ) -> UsersProfileDB:
 
         with SessionLocal() as session:
-            profile = UserProfileDB(
+            profile = UsersProfileDB(
                 user_id=user_id,
                 name=name,
                 description=description,
@@ -62,38 +55,38 @@ class UserRepository:
 
             return profile
 
-    def get_profile(self, profile_id: int) -> UserProfileDB | None:
+    def get_profile(self, profile_id: int) -> UsersProfileDB | None:
 
         with SessionLocal() as session:
             return session.scalar(
-                select(UserProfileDB).where(
-                    UserProfileDB.id == profile_id
+                select(UsersProfileDB).where(
+                    UsersProfileDB.id == profile_id
                 )
             )
 
-    def get_user_profiles(self, user_id: int) -> list[UserProfileDB]:
+    def get_user_profiles(self, user_id: int) -> list[UsersProfileDB]:
 
         with SessionLocal() as session:
             result = session.scalars(
-                select(UserProfileDB)
+                select(UsersProfileDB)
                 .where(
-                    UserProfileDB.user_id == user_id
+                    UsersProfileDB.user_id == user_id
                 )
-                .order_by(UserProfileDB.id)
+                .order_by(UsersProfileDB.id)
             ).all()
 
             return list(result)
 
-    def get_active_profiles(self, user_id: int) -> list[UserProfileDB]:
+    def get_active_profiles(self, user_id: int) -> list[UsersProfileDB]:
 
         with SessionLocal() as session:
             result = session.scalars(
-                select(UserProfileDB)
+                select(UsersProfileDB)
                 .where(
-                    UserProfileDB.user_id == user_id,
-                    UserProfileDB.is_active.is_(True),
+                    UsersProfileDB.user_id == user_id,
+                    UsersProfileDB.is_active.is_(True),
                 )
-                .order_by(UserProfileDB.id)
+                .order_by(UsersProfileDB.id)
             ).all()
 
             return list(result)
@@ -102,7 +95,7 @@ class UserRepository:
 
         with SessionLocal() as session:
             profile = session.get(
-                UserProfileDB,
+                UsersProfileDB,
                 profile_id,
             )
 
@@ -119,7 +112,7 @@ class UserRepository:
 
         with SessionLocal() as session:
             profile = session.get(
-                UserProfileDB,
+                UsersProfileDB,
                 profile_id,
             )
 

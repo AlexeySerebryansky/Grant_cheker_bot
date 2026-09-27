@@ -19,3 +19,5 @@ class Grant:
     status: str = ""
 
     url: str = ""
+
+    embedding: list[float] | None = None

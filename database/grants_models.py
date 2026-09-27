@@ -1,6 +1,7 @@
 from sqlalchemy import BigInteger, Text, UniqueConstraint
 from sqlalchemy.dialects.postgresql import ARRAY
 from sqlalchemy.orm import Mapped, mapped_column
+from pgvector.sqlalchemy import Vector
 
 from database.base import Base
 
@@ -44,7 +45,7 @@ class GrantDBBase:
     full_description: Mapped[str | None] = mapped_column(Text)
 
     embedding: Mapped[str | None] = mapped_column(
-        Text
+        Vector(1024)
     )
 
 

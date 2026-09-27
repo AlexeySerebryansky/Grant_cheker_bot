@@ -2,6 +2,7 @@ from datetime import datetime, timezone
 
 from sqlalchemy import BigInteger, Boolean, DateTime, ForeignKey, Text
 from sqlalchemy.orm import Mapped, mapped_column
+from pgvector.sqlalchemy import Vector
 
 from database.base import Base
 
@@ -41,8 +42,8 @@ class UserDB(Base):
     )
 
 
-class UserProfileDB(Base):
-    __tablename__ = "user_profiles"
+class UsersProfileDB(Base):
+    __tablename__ = "users_profiles"
 
     id: Mapped[int] = mapped_column(
         BigInteger,
@@ -67,7 +68,7 @@ class UserProfileDB(Base):
     )
 
     embedding: Mapped[str | None] = mapped_column(
-        Text
+        Vector(1024)
     )
 
     is_active: Mapped[bool] = mapped_column(
